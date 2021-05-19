@@ -1,44 +1,52 @@
-import { IsDefined, IsEmail, IsString, MinLength, IsOptional, IsNumber, Min, IsIn } from 'class-validator';
+// eslint-disable-next-line no-unused-vars
+namespace Requests {
+  const { IsDefined, IsEmail, IsString, MinLength, IsOptional, IsNumber, Min, IsIn } = require('class-validator');
 
-export class PutUser {
-  @IsOptional()
-  @IsString()
-  @MinLength(3)
-  name: string;
+  class PutUser {
+    @IsOptional()
+    @IsString()
+    @MinLength(3)
+    name: string;
 
-  @IsOptional()
-  @IsString()
-  @IsEmail()
-  email: string;
-}
+    @IsOptional()
+    @IsString()
+    @IsEmail()
+    email: string;
+  }
 
-export class PostUserUsd {
-  @IsDefined()
-  @IsString()
-  @IsIn(['withdraw', 'deposit'])
-  action: string;
+  class PostUserUsd {
+    @IsDefined()
+    @IsString()
+    @IsIn(['withdraw', 'deposit'])
+    action: string;
 
-  @IsDefined()
-  @IsNumber()
-  @Min(0)
-  amount: number;
-}
+    @IsDefined()
+    @IsNumber()
+    @Min(0)
+    amount: number;
+  }
 
-export class PostUserBitcoins {
-  @IsDefined()
-  @IsString()
-  @IsIn(['sell', 'buy'])
-  action: string;
+  class PostUserBitcoins {
+    @IsDefined()
+    @IsString()
+    @IsIn(['sell', 'buy'])
+    action: string;
 
-  @IsDefined()
-  @IsNumber()
-  @Min(0)
-  amount: number;
-}
+    @IsDefined()
+    @IsNumber()
+    @Min(0)
+    amount: number;
+  }
 
-export class PutBitcoin {
-  @IsDefined()
-  @IsNumber()
-  @Min(0)
-  price: number;
+  class PutBitcoin {
+    @IsDefined()
+    @IsNumber()
+    @Min(0)
+    price: number;
+  }
+
+  module.exports.PutUser = PutUser;
+  module.exports.PostUserUsd = PostUserUsd;
+  module.exports.PostUserBitcoins = PostUserBitcoins;
+  module.exports.PutBitcoin = PutBitcoin;
 }

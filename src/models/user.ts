@@ -1,41 +1,45 @@
-import { IsDefined, IsEmail, Min, IsNumber, IsString, MinLength, IsOptional } from 'class-validator';
-import moment from 'moment';
-import { v4 as uuid4 } from 'uuid';
+// eslint-disable-next-line no-unused-vars
+namespace UserModel {
+  const { IsDefined, IsEmail, Min, IsNumber, IsString, MinLength, IsOptional, IsDate } = require('class-validator');
+  const { v4: uuid4 } = require('uuid');
 
-export class User {
-  @IsString()
-  id: string = uuid4();
+  class User {
+    @IsString()
+    id: string = uuid4();
 
-  @IsDefined()
-  @IsString()
-  @MinLength(3)
-  name: string;
+    @IsDefined()
+    @IsString()
+    @MinLength(3)
+    name: string;
 
-  @IsDefined()
-  @IsString()
-  @MinLength(3)
-  userName: string;
+    @IsDefined()
+    @IsString()
+    @MinLength(3)
+    userName: string;
 
-  @IsDefined()
-  @IsString()
-  @IsEmail()
-  email: string;
+    @IsDefined()
+    @IsString()
+    @IsEmail()
+    email: string;
 
-  @IsOptional()
-  @Min(0)
-  @IsNumber()
-  bitcoinAmount: number = 0;
+    @IsOptional()
+    @Min(0)
+    @IsNumber()
+    bitcoinAmount: number = 0;
 
-  @IsOptional()
-  @Min(0)
-  @IsNumber()
-  usdBalance: number = 0;
+    @IsOptional()
+    @Min(0)
+    @IsNumber()
+    usdBalance: number = 0;
 
-  @IsOptional()
-  @IsString()
-  createdAt: string = moment().format();
+    @IsOptional()
+    @IsDate()
+    createdAt: Date = new Date();
 
-  @IsOptional()
-  @IsString()
-  updatedAt: string;
+    @IsOptional()
+    @IsDate()
+    updatedAt: Date;
+  }
+
+  module.exports.User = User;
 }
