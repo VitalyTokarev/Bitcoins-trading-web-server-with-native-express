@@ -1,12 +1,11 @@
-// eslint-disable-next-line no-unused-vars
-namespace BitcoinRepository {
-  const { Bitcoin } = require('./bitcoin');
-  const { error } = require('../utils/errors');
 
-  class BitcoinRepository {
+import { Bitcoin } from './bitcoin';
+import { error } from '../utils/errors';
+
+class BitcoinRepository {
     private _bitcoin = new Bitcoin();
 
-    public async ReadBitcoin (): Promise<InstanceType<typeof Bitcoin>> {
+    public async ReadBitcoin (): Promise<Bitcoin> {
       try {
         return this._bitcoin;
       } catch (err) {
@@ -14,9 +13,9 @@ namespace BitcoinRepository {
       }
     }
 
-    public async UpdateBitcoin (bitcoin: InstanceType<typeof Bitcoin>): Promise<void> {
+    public async UpdateBitcoin (bitcoin: Bitcoin): Promise<Bitcoin> {
       try {
-        const newValues: typeof Bitcoin = { ...bitcoin };
+        const newValues: Bitcoin = { ...bitcoin };
 
         newValues.updatedAt = new Date();
         this._bitcoin = newValues;
@@ -26,8 +25,6 @@ namespace BitcoinRepository {
         throw error(err);
       }
     }
-  }
-
-  global.bitcoinRepository = new BitcoinRepository();
-
 }
+
+global.bitcoinRepository = new BitcoinRepository();

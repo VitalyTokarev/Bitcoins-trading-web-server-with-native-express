@@ -1,16 +1,14 @@
-// eslint-disable-next-line no-unused-vars
-namespace UsersRoutes {
-const { Router } = require('express');
-const { makeValidateBody } = require('express-class-validator');
+import { Router } from 'express';
+import { makeValidateBody } from 'express-class-validator';
 
-const { PutUser, PostUserUsd, PostUserBitcoins } = require('../utils/requests');
-const { User } = require('../models/user');
-const usersController = require('../controllers/users-controller');
-const asyncHandler = require('express-async-error-handler');
+import { PutUser, PostUserUsd, PostUserBitcoins } from '../utils/requests';
+import { User } from '../models/user';
+import * as usersController from '../controllers/users-controller';
+import asyncHandler from 'express-async-error-handler';
 
 const path = 'users';
 
-module.exports.getUsersRoutes = function (router : InstanceType<typeof Router>) : InstanceType<typeof Router> {
+export const getUsersRoutes = function (router : Router) : Router {
   router.get(`/${path}/:id`, asyncHandler(usersController.getUserAsync));
   router.post(`/${path}/`, makeValidateBody(User), asyncHandler(usersController.postUserAsync));
   router.put(`/${path}/:id`, makeValidateBody(PutUser), asyncHandler(usersController.putUserAsync));
@@ -20,5 +18,3 @@ module.exports.getUsersRoutes = function (router : InstanceType<typeof Router>) 
 
   return router;
 };
-
-}

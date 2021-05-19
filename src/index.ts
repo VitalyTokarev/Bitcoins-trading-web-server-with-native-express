@@ -1,20 +1,18 @@
-const dotenv = require('dotenv');
-const express = require('express');
-const pino = require('pino');
-const expressPino = require('express-pino-logger');
+import dotenv from 'dotenv';
+import express, { Express } from 'express';
+import pino from 'pino';
+import expressPino from 'express-pino-logger';
 
-const router = require('./routes/index');
-const { handleErrors } = require('./middlewares/global-error-handler');
-require('./models/index');
-
-const { Express } = express;
+import router from './routes/index';
+import { handleErrors } from './middlewares/global-error-handler';
+import './models/index';
 
 dotenv.config();
 
 const port = process.env.PORT;
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' }, pino.destination('./src/logs/info.log'));
 const expressLogger = expressPino({ logger });
-const app: InstanceType<typeof Express> = express();
+const app: Express = express();
 
 app.use(expressLogger);
 app.use(express.json());

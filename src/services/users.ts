@@ -1,146 +1,144 @@
-// eslint-disable-next-line no-unused-vars
-namespace Repositoty {
-  const { User } = require('../models/user');
-  const { Bitcoin } = require('../models/bitcoin');
-  const { PutUser, PostUserUsd, PostUserBitcoins } = require('../utils/requests');
-  const { userNotFound, insufficientFunds, error } = require('../utils/errors');
 
-     module.exports.getUser = async function (id: string): Promise<InstanceType<typeof User>> {
-       try {
-         const user: InstanceType<typeof User> = await global.usersRepository.ReadUser(id);
+import { User } from '../models/user';
+import { Bitcoin } from '../models/bitcoin';
+import { PutUser, PostUserUsd, PostUserBitcoins } from '../utils/requests';
+import { userNotFound, insufficientFunds, error, ErrorHandler } from '../utils/errors';
 
-         if (!user) {
-           throw userNotFound();
-         }
+export const getUser = async function (id: string): Promise<User> {
+  try {
+    const user: User = await global.usersRepository.ReadUser(id);
 
-         return user;
-       } catch (err) {
-         throw error(err);
-       }
-     };
-
-    module.exports.createUser = async function (user: InstanceType<typeof User>): Promise<InstanceType<typeof User>> {
-      try {
-        const createdUser: InstanceType<typeof User> = await global.usersRepository.CreateUser(user);
-
-        return createdUser;
-      } catch (err) {
-        throw error(err);
-      }
-    };
-
-    module.exports.putUser = async function (user: InstanceType<typeof PutUser>, id: string): Promise<InstanceType<typeof User>> {
-      try {
-        const updatedUser: InstanceType<typeof User> = await global.usersRepository.UpdateUser(id, user);
-
-        if (!updatedUser) {
-          throw userNotFound();
-        }
-
-        return updatedUser;
-      } catch (err) {
-        throw error(err);
-      }
-    };
-
-    module.exports.getBalance = async function (id: string): Promise<any> {
-      try {
-        const user: InstanceType<typeof User> = await global.usersRepository.ReadUser(id);
-
-        if (!user) {
-          throw userNotFound();
-        }
-
-        const bitcoinPirce: InstanceType<typeof Bitcoin> = await global.bitcoinRepository.ReadBitcoin();
-
-        return { balance: user.usdBalance + user.bitcoinAmount * bitcoinPirce.price };
-      } catch (err) {
-        throw error(err);
-      }
-    };
-
-    function depositUsd (id: string, user: InstanceType<typeof User>, usdAmount: number): InstanceType<typeof User> {
-      try {
-        user.usdBalance += usdAmount;
-
-        return user;
-      } catch (err) {
-        throw error(err);
-      }
+    if (!user) {
+      throw userNotFound();
     }
 
-    function withdrawUsd (id: string, user: InstanceType<typeof User>, usdAmount: number): InstanceType<typeof User> {
-      try {
-        if (user.usdBalance < usdAmount) {
-          throw insufficientFunds();
-        }
+    return user;
+  } catch (err) {
+    throw error(err);
+  }
+};
 
-        user.usdBalance -= usdAmount;
-        return user;
-      } catch (err) {
-        throw error(err);
-      }
+export const createUser = async function (user: User): Promise<User> {
+  try {
+    const createdUser: User = await global.usersRepository.CreateUser(user);
+
+    return createdUser;
+  } catch (err) {
+    throw error(err);
+  }
+};
+
+export const putUser = async function (user: PutUser, id: string): Promise<User> {
+  try {
+    const updatedUser: User = await global.usersRepository.UpdateUser(id, user);
+
+    if (!updatedUser) {
+      throw userNotFound();
     }
 
-    module.exports.changeUsdBalance = async function (id: string, requestBody: InstanceType<typeof PostUserUsd>) : Promise<InstanceType<typeof User>> {
-      try {
-        const user: InstanceType<typeof User> = await global.usersRepository.ReadUser(id);
+    return updatedUser;
+  } catch (err) {
+    throw error(err);
+  }
+};
 
-        if (!user) {
-          throw userNotFound();
-        }
+export const getBalance = async function (id: string): Promise<any> {
+  try {
+    const user: User = await global.usersRepository.ReadUser(id);
 
-        const { action, amount } = requestBody;
-        return action === 'deposit' ? depositUsd(id, user, amount) : withdrawUsd(id, user, amount);
-      } catch (err) {
-        throw error(err);
-      }
-    };
-
-    async function buyBitcoin (user: typeof User, bitcoinAmount: number): Promise<InstanceType<typeof User>> {
-      try {
-        const bitcoin: InstanceType<typeof Bitcoin> = await global.bitcoinRepository.ReadBitcoin();
-
-        if (user.usdBalance < bitcoinAmount * bitcoin.price) {
-          throw insufficientFunds();
-        }
-
-        user.bitcoinAmount += bitcoinAmount;
-        user.usdBalance -= bitcoinAmount * bitcoin.price;
-        return user;
-      } catch (err) {
-        throw error(err);
-      }
+    if (!user) {
+      throw userNotFound();
     }
 
-    async function sellBitcoin (user: InstanceType<typeof User>, bitcoinAmount: number): Promise<InstanceType<typeof User>> {
-      try {
-        const bitcoin: InstanceType<typeof Bitcoin> = await global.bitcoinRepository.ReadBitcoin();
+    const bitcoinPirce: Bitcoin = await global.bitcoinRepository.ReadBitcoin();
 
-        if (user.bitcoinAmount < bitcoinAmount) {
-          throw error(422, 'Not enough bitcoins in the account');
-        }
+    return { balance: user.usdBalance + user.bitcoinAmount * bitcoinPirce.price };
+  } catch (err) {
+    throw error(err);
+  }
+};
 
-        user.bitcoinAmount -= bitcoinAmount;
-        user.usdBalance += bitcoinAmount * bitcoin.price;
-        return user;
-      } catch (err) {
-        throw error(err);
-      }
-    }
+function depositUsd (id: string, user: User, usdAmount: number): User {
+  try {
+    user.usdBalance += usdAmount;
 
-    module.exports.changeBitcoinsBalance = async function (id: string, requestBody: InstanceType<typeof PostUserBitcoins>) : Promise<InstanceType<typeof User>> {
-      try {
-        const user: InstanceType<typeof User> = await global.usersRepository.ReadUser(id);
-
-        if (!user) {
-          throw userNotFound();
-        }
-
-        const { action, amount } = requestBody;
-        return action === 'buy' ? buyBitcoin(user, amount) : sellBitcoin(user, amount);
-      } catch (err) {
-        throw error(err);
-      }
-    };
+    return user;
+  } catch (err) {
+    throw error(err);
+  }
 }
+
+function withdrawUsd (id: string, user: User, usdAmount: number): User {
+  try {
+    if (user.usdBalance < usdAmount) {
+      throw insufficientFunds();
+    }
+
+    user.usdBalance -= usdAmount;
+    return user;
+  } catch (err) {
+    throw error(err);
+  }
+}
+
+export const changeUsdBalance = async function (id: string, requestBody: PostUserUsd) : Promise<User> {
+  try {
+    const user: User = await global.usersRepository.ReadUser(id);
+
+    if (!user) {
+      throw userNotFound();
+    }
+
+    const { action, amount } = requestBody;
+    return action === 'deposit' ? depositUsd(id, user, amount) : withdrawUsd(id, user, amount);
+  } catch (err) {
+    throw error(err);
+  }
+};
+
+async function buyBitcoin (user: User, bitcoinAmount: number): Promise<User> {
+  try {
+    const bitcoin: Bitcoin = await global.bitcoinRepository.ReadBitcoin();
+
+    if (user.usdBalance < bitcoinAmount * bitcoin.price) {
+      throw insufficientFunds();
+    }
+
+    user.bitcoinAmount += bitcoinAmount;
+    user.usdBalance -= bitcoinAmount * bitcoin.price;
+    return user;
+  } catch (err) {
+    throw error(err);
+  }
+}
+
+async function sellBitcoin (user: User, bitcoinAmount: number): Promise<User> {
+  try {
+    const bitcoin: Bitcoin = await global.bitcoinRepository.ReadBitcoin();
+
+    if (user.bitcoinAmount < bitcoinAmount) {
+      throw new ErrorHandler(422, 'Not enough bitcoins in the account');
+    }
+
+    user.bitcoinAmount -= bitcoinAmount;
+    user.usdBalance += bitcoinAmount * bitcoin.price;
+    return user;
+  } catch (err) {
+    throw error(err);
+  }
+}
+
+export const changeBitcoinsBalance = async function (id: string, requestBody: PostUserBitcoins) : Promise<User> {
+  try {
+    const user: User = await global.usersRepository.ReadUser(id);
+
+    if (!user) {
+      throw userNotFound();
+    }
+
+    const { action, amount } = requestBody;
+    return action === 'buy' ? buyBitcoin(user, amount) : sellBitcoin(user, amount);
+  } catch (err) {
+    throw error(err);
+  }
+};

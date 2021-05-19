@@ -1,8 +1,7 @@
-// eslint-disable-next-line no-unused-vars
-namespace Requests {
-  const { IsDefined, IsEmail, IsString, MinLength, IsOptional, IsNumber, Min, IsIn } = require('class-validator');
 
-  class PutUser {
+import { IsDefined, IsEmail, IsString, MinLength, IsOptional, IsNumber, Min, IsIn } from 'class-validator';
+
+export class PutUser {
     @IsOptional()
     @IsString()
     @MinLength(3)
@@ -12,9 +11,9 @@ namespace Requests {
     @IsString()
     @IsEmail()
     email: string;
-  }
+}
 
-  class PostUserUsd {
+export class PostUserUsd {
     @IsDefined()
     @IsString()
     @IsIn(['withdraw', 'deposit'])
@@ -24,9 +23,9 @@ namespace Requests {
     @IsNumber()
     @Min(0)
     amount: number;
-  }
+}
 
-  class PostUserBitcoins {
+export class PostUserBitcoins {
     @IsDefined()
     @IsString()
     @IsIn(['sell', 'buy'])
@@ -36,17 +35,11 @@ namespace Requests {
     @IsNumber()
     @Min(0)
     amount: number;
-  }
+}
 
-  class PutBitcoin {
+export class PutBitcoin {
     @IsDefined()
     @IsNumber()
     @Min(0)
     price: number;
-  }
-
-  module.exports.PutUser = PutUser;
-  module.exports.PostUserUsd = PostUserUsd;
-  module.exports.PostUserBitcoins = PostUserBitcoins;
-  module.exports.PutBitcoin = PutBitcoin;
 }

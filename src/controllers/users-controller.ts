@@ -1,43 +1,39 @@
 import { Request, Response } from 'express';
+import { User } from '../models/user';
+import * as userService from '../services/users';
 
-// eslint-disable-next-line no-unused-vars
-namespace usersController {
-  const { User } = require('../models/user');
-  const userService = require('../services/users');
+export const getUserAsync = async function (req: Request, res: Response) : Promise<void> {
+  const user: User = await userService.getUser(req.params.id);
 
-  module.exports.getUserAsync = async function (req: Request, res: Response) : Promise<void> {
-    const user: InstanceType<typeof User> = await userService.getUser(req.params.id);
+  res.send(user);
+};
 
-    res.send(user);
-  };
+export const postUserAsync = async function (req: Request, res: Response) : Promise<void> {
+  const user: User = await userService.createUser(req.body);
 
-  module.exports.postUserAsync = async function (req: Request, res: Response) : Promise<void> {
-    const user = await userService.createUser(req.body);
+  res.send(user);
+};
 
-    res.send(user);
-  };
+export const putUserAsync = async function (req: Request, res: Response) : Promise<void> {
+  const user: User = await userService.putUser(req.body, req.params.id);
 
-  module.exports.putUserAsync = async function (req: Request, res: Response) : Promise<void> {
-    const user = await userService.putUser(req.body, req.params.id);
+  res.send(user);
+};
 
-    res.send(user);
-  };
+export const getBalanceAsync = async function (req: Request, res: Response) : Promise<void> {
+  const balance = await userService.getBalance(req.params.id);
 
-  module.exports.getBalanceAsync = async function (req: Request, res: Response) : Promise<void> {
-    const balance = await userService.getBalance(req.params.id);
+  res.send(balance);
+};
 
-    res.send(balance);
-  };
+export const postUserUsdAsync = async function (req: Request, res: Response) : Promise<void> {
+  const user: User = await userService.changeUsdBalance(req.params.id, req.body);
 
-  module.exports.postUserUsdAsync = async function (req: Request, res: Response) : Promise<void> {
-    const user = await userService.changeUsdBalance(req.params.id, req.body);
+  res.send(user);
+};
 
-    res.send(user);
-  };
+export const postUserBitcoinsAsync = async function (req: Request, res: Response) : Promise<void> {
+  const user: User = await userService.changeBitcoinsBalance(req.params.id, req.body);
 
-  module.exports.postUserBitcoinsAsync = async function (req: Request, res: Response) : Promise<void> {
-    const user = await userService.changeBitcoinsBalance(req.params.id, req.body);
-
-    res.send(user);
-  };
-}
+  res.send(user);
+};

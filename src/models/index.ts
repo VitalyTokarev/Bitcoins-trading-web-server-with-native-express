@@ -1,2 +1,2 @@
-require('./bitcoinRepositroy');
-require('./usersRepository');
+import './bitcoinRepositroy';
+import './usersRepository';

@@ -1,16 +1,12 @@
-// eslint-disable-next-line no-unused-vars
-namespace BitcoinModel {
-  const { IsNumber, Min, IsOptional, IsDate } = require('class-validator');
 
-  class Bitcoin {
-    @IsNumber()
-    @Min(0)
-    price: number = 100;
+import { IsNumber, Min, IsOptional, IsDate } from 'class-validator';
 
-    @IsOptional()
-    @IsDate()
-    updatedAt: Date;
-  }
+export class Bitcoin {
+  @IsNumber()
+  @Min(0)
+  price: number = 100;
 
-  module.exports.Bitcoin = Bitcoin;
+  @IsOptional()
+  @IsDate()
+  updatedAt: Date;
 }

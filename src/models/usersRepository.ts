@@ -1,14 +1,13 @@
-// eslint-disable-next-line no-unused-vars
-namespace UsersRepository {
-  const { User } = require('./user');
-  const { error } = require('../utils/errors');
 
-  class UsersRepository {
-    private _users: Array<InstanceType<typeof User>> = [];
+import { User } from './user';
+import { error } from '../utils/errors';
 
-    public async ReadUser (id: string) : Promise<InstanceType<typeof User>> {
+class UsersRepository {
+    private _users: Array<User> = [];
+
+    public async ReadUser (id: string) : Promise<User> {
       try {
-        const user: typeof User = this._users.find(item => item.id === id);
+        const user: User = this._users.find(item => item.id === id);
 
         return user;
       } catch (err) {
@@ -16,7 +15,7 @@ namespace UsersRepository {
       }
     }
 
-    public async CreateUser (user: InstanceType<typeof User>) : Promise<InstanceType<typeof User>> {
+    public async CreateUser (user: User) : Promise<User> {
       try {
         this._users.push(user);
 
@@ -26,9 +25,9 @@ namespace UsersRepository {
       }
     }
 
-    public async UpdateUser (id: string, user: InstanceType<typeof User>) : Promise<InstanceType<typeof User>> {
+    public async UpdateUser (id: string, user: User) : Promise<User> {
       try {
-        const updatedUser = this._users.find(item => item.id === id);
+        const updatedUser: User = this._users.find(item => item.id === id);
 
         if (updatedUser) {
           updatedUser.name = user.name || updatedUser.name;
@@ -43,8 +42,6 @@ namespace UsersRepository {
         throw error(err);
       }
     }
-  }
-
-  global.usersRepository = new UsersRepository();
-
 }
+
+global.usersRepository = new UsersRepository();

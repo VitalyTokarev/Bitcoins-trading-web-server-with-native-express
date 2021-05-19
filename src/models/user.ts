@@ -1,9 +1,8 @@
-// eslint-disable-next-line no-unused-vars
-namespace UserModel {
-  const { IsDefined, IsEmail, Min, IsNumber, IsString, MinLength, IsOptional, IsDate } = require('class-validator');
-  const { v4: uuid4 } = require('uuid');
 
-  class User {
+import { IsDefined, IsEmail, Min, IsNumber, IsString, MinLength, IsOptional, IsDate } from 'class-validator';
+import { v4 as uuid4 } from 'uuid';
+
+export class User {
     @IsString()
     id: string = uuid4();
 
@@ -39,7 +38,4 @@ namespace UserModel {
     @IsOptional()
     @IsDate()
     updatedAt: Date;
-  }
-
-  module.exports.User = User;
 }

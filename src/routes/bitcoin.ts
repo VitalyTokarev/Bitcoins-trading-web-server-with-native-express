@@ -1,18 +1,16 @@
-// eslint-disable-next-line no-unused-vars
-namespace BitcoinRoutes {
-  const { Router } = require('express');
-  const { makeValidateBody } = require('express-class-validator');
 
-  const { PutBitcoin } = require('../utils/requests');
-  const bitcoinController = require('../controllers/bitcoin-controller');
-  const asyncHandler = require('express-async-error-handler');
+import { Router } from 'express';
+import { makeValidateBody } from 'express-class-validator';
 
-  const path = 'bitcoin';
+import { PutBitcoin } from '../utils/requests';
+import * as bitcoinController from '../controllers/bitcoin-controller';
+import asyncHandler from 'express-async-error-handler';
 
-  module.exports.getBitcoinRoutes = function (router : InstanceType<typeof Router>) : InstanceType<typeof Router> {
-    router.get(`/${path}/`, asyncHandler(bitcoinController.getBitcoinAsync));
-    router.put(`/${path}/`, makeValidateBody(PutBitcoin), asyncHandler(bitcoinController.putBitcoinAsync));
+const path = 'bitcoin';
 
-    return router;
-  };
-}
+export const getBitcoinRoutes = function (router : Router) : Router {
+  router.get(`/${path}/`, asyncHandler(bitcoinController.getBitcoinAsync));
+  router.put(`/${path}/`, makeValidateBody(PutBitcoin), asyncHandler(bitcoinController.putBitcoinAsync));
+
+  return router;
+};
