@@ -32,7 +32,7 @@ class UsersRepository {
         if (updatedUser) {
           updatedUser.name = user.name || updatedUser.name;
           updatedUser.email = user.email || updatedUser.email;
-          updatedUser.updatedAt = new Date();
+          updatedUser.updatedAt = new Date().toISOString();
           updatedUser.usdBalance = user.usdBalance || updatedUser.usdBalance;
           updatedUser.bitcoinAmount = user.bitcoinAmount || updatedUser.bitcoinAmount;
         }

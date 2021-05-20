@@ -8,7 +8,7 @@ import asyncHandler from 'express-async-error-handler';
 
 const path = 'bitcoin';
 
-export const getBitcoinRoutes = function (router : Router) : Router {
+export function getBitcoinRoutes (router : Router) : Router {
   router.get(`/${path}/`, asyncHandler(bitcoinController.getBitcoinAsync));
   router.put(`/${path}/`, makeValidateBody(PutBitcoin), asyncHandler(bitcoinController.putBitcoinAsync));
 

@@ -1,5 +1,5 @@
 
-import { IsNumber, Min, IsOptional, IsDate } from 'class-validator';
+import { IsNumber, Min, IsOptional, IsString } from 'class-validator';
 
 export class Bitcoin {
   @IsNumber()
@@ -7,6 +7,6 @@ export class Bitcoin {
   price: number = 100;
 
   @IsOptional()
-  @IsDate()
-  updatedAt: Date;
+  @IsString()
+  updatedAt: string;
 }

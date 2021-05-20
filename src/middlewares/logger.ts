@@ -1,6 +1,7 @@
+import { Request, Response, NextFunction } from 'express';
 import expressPino from 'express-pino-logger';
 
-export const loggerMiddleware = (req, res, next) => {
+export function loggerMiddleware (req: Request, res: Response, next: NextFunction): void {
   global.logger.debug('Calling res.send');
   next();
 };

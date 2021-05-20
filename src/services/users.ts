@@ -4,7 +4,7 @@ import { Bitcoin } from '../models/bitcoin';
 import { PutUser, PostUserUsd, PostUserBitcoins } from '../utils/requests';
 import { userNotFound, insufficientFunds, error, ErrorHandler } from '../utils/errors';
 
-export const getUser = async function (id: string): Promise<User> {
+export async function getUser (id: string): Promise<User> {
   try {
     const user: User = await global.usersRepository.ReadUser(id);
 
@@ -18,7 +18,7 @@ export const getUser = async function (id: string): Promise<User> {
   }
 };
 
-export const createUser = async function (user: User): Promise<User> {
+export async function createUser (user: User): Promise<User> {
   try {
     const createdUser: User = await global.usersRepository.CreateUser(user);
 
@@ -28,7 +28,7 @@ export const createUser = async function (user: User): Promise<User> {
   }
 };
 
-export const putUser = async function (user: PutUser, id: string): Promise<User> {
+export async function putUser (user: PutUser, id: string): Promise<User> {
   try {
     const updatedUser: User = await global.usersRepository.UpdateUser(id, user);
 
@@ -42,7 +42,7 @@ export const putUser = async function (user: PutUser, id: string): Promise<User>
   }
 };
 
-export const getBalance = async function (id: string): Promise<any> {
+export async function getBalance (id: string): Promise<any> {
   try {
     const user: User = await global.usersRepository.ReadUser(id);
 
@@ -81,7 +81,7 @@ function withdrawUsd (id: string, user: User, usdAmount: number): User {
   }
 }
 
-export const changeUsdBalance = async function (id: string, requestBody: PostUserUsd) : Promise<User> {
+export async function changeUsdBalance (id: string, requestBody: PostUserUsd) : Promise<User> {
   try {
     const user: User = await global.usersRepository.ReadUser(id);
 
@@ -128,7 +128,7 @@ async function sellBitcoin (user: User, bitcoinAmount: number): Promise<User> {
   }
 }
 
-export const changeBitcoinsBalance = async function (id: string, requestBody: PostUserBitcoins) : Promise<User> {
+export async function changeBitcoinsBalance (id: string, requestBody: PostUserBitcoins) : Promise<User> {
   try {
     const user: User = await global.usersRepository.ReadUser(id);
 

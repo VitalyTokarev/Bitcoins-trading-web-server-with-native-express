@@ -1,5 +1,5 @@
 
-import { IsDefined, IsEmail, Min, IsNumber, IsString, MinLength, IsOptional, IsDate } from 'class-validator';
+import { IsDefined, IsEmail, Min, IsNumber, IsString, MinLength, IsOptional } from 'class-validator';
 import { v4 as uuid4 } from 'uuid';
 
 export class User {
@@ -32,10 +32,10 @@ export class User {
     usdBalance: number = 0;
 
     @IsOptional()
-    @IsDate()
-    createdAt: Date = new Date();
+    @IsString()
+    createdAt: string = new Date().toISOString();
 
     @IsOptional()
-    @IsDate()
-    updatedAt: Date;
+    @IsString()
+    updatedAt: string;
 }

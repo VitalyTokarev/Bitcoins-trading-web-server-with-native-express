@@ -17,7 +17,7 @@ class BitcoinRepository {
       try {
         const newValues: Bitcoin = { ...bitcoin };
 
-        newValues.updatedAt = new Date();
+        newValues.updatedAt = new Date().toISOString();
         this._bitcoin = newValues;
 
         return this._bitcoin;

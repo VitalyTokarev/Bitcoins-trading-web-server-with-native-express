@@ -8,7 +8,7 @@ import asyncHandler from 'express-async-error-handler';
 
 const path = 'users';
 
-export const getUsersRoutes = function (router : Router) : Router {
+export function getUsersRoutes (router : Router) : Router {
   router.get(`/${path}/:id`, asyncHandler(usersController.getUserAsync));
   router.post(`/${path}/`, makeValidateBody(User), asyncHandler(usersController.postUserAsync));
   router.put(`/${path}/:id`, makeValidateBody(PutUser), asyncHandler(usersController.putUserAsync));

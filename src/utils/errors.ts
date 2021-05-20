@@ -8,12 +8,12 @@ export class ErrorHandler extends Error {
     }
 }
 
-export const userNotFound = function (): ErrorHandler {
+export function userNotFound (): ErrorHandler {
   return new ErrorHandler(404, 'User not found!');
 };
-export const error = function (err: ErrorHandler): ErrorHandler {
+export function error (err: ErrorHandler): ErrorHandler {
   return new ErrorHandler(err.code || 500, err.message || err);
 };
-export const insufficientFunds = function (): ErrorHandler {
+export function insufficientFunds (): ErrorHandler {
   return new ErrorHandler(422, 'Insufficient funds for the account');
 };

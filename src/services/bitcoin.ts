@@ -1,7 +1,7 @@
 import { Bitcoin } from '../models/bitcoin';
 import { error } from '../utils/errors';
 
-export const getBitcoin = async function (): Promise<Bitcoin> {
+export async function getBitcoin (): Promise<Bitcoin> {
   try {
     const bitcoin: Bitcoin = await global.bitcoinRepository.ReadBitcoin();
 
@@ -11,7 +11,7 @@ export const getBitcoin = async function (): Promise<Bitcoin> {
   }
 };
 
-export const putBitcoin = async function (bitcoin: Bitcoin): Promise<Bitcoin> {
+export async function putBitcoin (bitcoin: Bitcoin): Promise<Bitcoin> {
   try {
     const updatedBitcoin: Bitcoin = await global.bitcoinRepository.UpdateBitcoin(bitcoin);
 
